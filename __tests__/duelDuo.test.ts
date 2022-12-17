@@ -13,8 +13,8 @@ afterAll(async () => {
     driver.quit()
 })
 
-test('Title shows up when page loads', async () => {
-    const title = await driver.findElement(By.id('title'))
-    const displayed = await title.isDisplayed()
-    expect(displayed).toBe(true)
-})
+// test('Title shows up when page loads', async () => {
+//     const title = await driver.findElement(By.id('title'))
+//     const displayed = await title.isDisplayed()
+//     expect(displayed).toBe(true)
+// })

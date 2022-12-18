@@ -1,19 +1,33 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const { bots, playerRecord } = require('./data')
 const { shuffleArray } = require('./utils')
+const { ROLLBAR_TOKEN } = process.env;
 
 app.use(express.json())
-app.use(express.static('public'));
+app.use(express.static('public'))
+
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar')
+var rollbar = new Rollbar({
+    accessToken: ROLLBAR_TOKEN,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+})
+
+// record a generic message and send it to Rollbar
+rollbar.log('Hello, King!')
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'))
 })
 
 app.get('/api/robots', (req, res) => {
     try {
         res.status(200).send(bots)
     } catch (error) {
+        rollbar.error('UNABLE TO RETRIEVE BOTS')
         console.log('ERROR GETTING BOTS', error)
         res.sendStatus(400)
     }
@@ -57,6 +71,7 @@ app.post('/api/duel', (req, res) => {
             res.status(200).send('You won!')
         }
     } catch (error) {
+        rollbar.debug('ERROR DUELING', error)
         console.log('ERROR DUELING', error)
         res.sendStatus(400)
     }
@@ -64,8 +79,10 @@ app.post('/api/duel', (req, res) => {
 
 app.get('/api/player', (req, res) => {
     try {
+        rollbar.info('PLAYER RECORD RETRIEVED')
         res.status(200).send(playerRecord)
     } catch (error) {
+        rollbar.critical('STATS NOT DELIVERED', error)
         console.log('ERROR GETTING PLAYER STATS', error)
         res.sendStatus(400)
     }

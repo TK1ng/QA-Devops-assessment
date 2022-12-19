@@ -1,5 +1,5 @@
 // const port = 4000;
-const baseUrl = `http://3.23.97.26`
+const baseUrl = `http://duelduo.kingdev.link`
 
 const drawBtn = document.querySelector('#draw')
 const choicesDiv = document.querySelector('#choices')

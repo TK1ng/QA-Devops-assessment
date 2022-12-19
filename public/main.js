@@ -1,3 +1,6 @@
+const port = 4000;
+const baseUrl = `http://localhost:${port}`
+
 const drawBtn = document.querySelector('#draw')
 const choicesDiv = document.querySelector('#choices')
 const compDuoDiv = document.querySelector('#comp-duo')
@@ -118,7 +121,7 @@ const putBotBack = (id) => {
 }
 
 const drawFive = () => {
-    axios.get('http://localhost:4000/api/robots/five')
+    axios.get(`${baseUrl}/api/robots/five`)
         .then(res => {
             choices = res.data.choices
             compDuo = res.data.compDuo
@@ -135,8 +138,8 @@ const duel = () => {
     renderCompDuo()
     document.querySelectorAll('.bot-btn').forEach(btn => btn.classList.add('hide'))
     setTimeout(() => {
-        axios.post('http://localhost:4000/api/duel', {compDuo, playerDuo})
-            .then(({data}) => {
+        axios.post(`${baseUrl}/api/duel`, { compDuo, playerDuo })
+            .then(({ data }) => {
                 resultsText.textContent = data
                 playAgainBtn.classList.remove('hide')
                 getPlayerStats()
@@ -158,18 +161,18 @@ const reset = () => {
 }
 
 const getPlayerStats = () => {
-    axios.get('http://localhost:4000/api/player')
-        .then(({data: {wins, losses}}) => {
+    axios.get(`${baseUrl}/api/player`)
+        .then(({ data: { wins, losses } }) => {
             winsText.textContent = `Wins: ${wins}`
             lossesTest.textContent = `Losses: ${losses}`
         })
 }
 
 const getAllBots = () => {
-    axios.get('http://localhost:4000/api/robots')
-        .then(({data}) => {
+    axios.get(`${baseUrl}/api/robots`)
+        .then(({ data }) => {
             allBotsDiv.innerHTML = ''
-        
+
             data.forEach(bot => {
                 let botHtml = makeRobotDisplayCard(bot)
                 allBotsDiv.innerHTML += botHtml
